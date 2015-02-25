@@ -6,7 +6,7 @@ def is_invalid_username(username):
 	"""
 	Returns true if username is invalid
 	"""
-	return !username.isalnum()
+	return not username.isalnum()
 	
 def is_invalid_payload(payload):
 	"""

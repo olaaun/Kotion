@@ -9,26 +9,25 @@ threads = set()
 
 
 class ClientHandler(SocketServer.BaseRequestHandler):
-    """
-    This is the ClientHandler class. Everytime a new client connects to the
-    server, a new ClientHandler object will be created. This class represents
-    only connected clients, and not the server itself. If you want to write
-    logic for the server, you must write it outside this class
-    """
-
-    def handle(self):
-        """
-        This method handles the connection between a client and the server.
-        """
-        self.ip = self.client_address[0]
-        self.port = self.client_address[1]
-        self.connection = self.request
+	"""
+	This is the ClientHandler class. Everytime a new client connects to the
+	server, a new ClientHandler object will be created. This class represents
+	only connected clients, and not the server itself. If you want to write
+	logic for the server, you must write it outside this class
+	"""
+	def handle(self):
+		"""
+		This method handles the connection between a client and the server.
+		"""
+		self.ip = self.client_address[0]
+		self.port = self.client_address[1]
+		self.connection = self.request
 		self.username = None
 
-        # Loop that listens for messages from the client
-        while True:
-            received_string = self.connection.recv(4096)
-            
+		# Loop that listens for messages from the client
+		while True:
+			received_string = self.connection.recv(4096)
+			
 			payload = parse_message()
 			response = None
 			
@@ -44,7 +43,7 @@ class ClientHandler(SocketServer.BaseRequestHandler):
 			payload["content"] = payload["content"].strip()
 			
 			#Login
-			elif payload["request"] == "login":
+			if payload["request"] == "login":
 				if is_invalid_username(payload["content"]):
 					response = servermessage.error("Invalid username. Can only contain charackters [A-Z], [a-z] and numbers 0-9")
 				elif is_username_taken(threads,payload["content"]):
@@ -98,7 +97,7 @@ def parse_message(message):
 	"""
 	try:
 		self.payload = json.loads(message)
-	except(ValueError e):
+	except ValueError:
 		self.payload = None
 			
 class ThreadedTCPServer(SocketServer.ThreadingMixIn, SocketServer.TCPServer):
