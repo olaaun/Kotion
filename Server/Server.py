@@ -55,7 +55,7 @@ class ClientHandler(SocketServer.BaseRequestHandler):
 			
 			#Logout
 			elif payload["request"] == "logout":
-				threads.remove(self)
+				del threads[self]
 				return #Not sure if this will work.
 				
 			#Msg
@@ -70,6 +70,9 @@ class ClientHandler(SocketServer.BaseRequestHandler):
 			#Help
 			elif payload["request"] == "help":
 				pass #TODO: help
+			
+			else:
+				raise Exception("Error. Unhandled payload: " + payload["request"] +","+ payload["content"]) #TODO: find out if able to trigger.
 			
 			self.connection.sendall(response)
 			
