@@ -6,7 +6,19 @@ import servermessage
 from validation import *
 
 threads = set()
+history = History()
 
+class History:
+	"""
+	History keeps track of the messages on the server.
+	The messages are payloads previously sent from the server.
+	"""
+	def __init__(self,threads):
+		self.messages = []
+	def getMessages():
+		return self.messages
+	def add(payload):
+		self.messages.append(payload)
 
 class ClientHandler(SocketServer.BaseRequestHandler):
 	"""
@@ -23,7 +35,7 @@ class ClientHandler(SocketServer.BaseRequestHandler):
 		self.port = self.client_address[1]
 		self.connection = self.request
 		self.username = None
-
+		
 		# Loop that listens for messages from the client
 		while True:
 			received_string = self.connection.recv(4096)
@@ -51,16 +63,18 @@ class ClientHandler(SocketServer.BaseRequestHandler):
 				else:
 					self.username = payload["content"]
 					threads.add(self)
-					response = servermessage.greeting(self.username)
+					response = servermessage.history(history)
 			
 			#Logout
 			elif payload["request"] == "logout":
 				del threads[self]
+				self.socket.close()
 				return #Not sure if this will work.
 				
 			#Msg
 			elif payload["request"] == "msg":
 				message = servermessage.message(self.username,payload["content"])
+				history.add(message)
 				servermessage.send_to_all_users(self,message)
 				continue
 			#Names
@@ -69,10 +83,10 @@ class ClientHandler(SocketServer.BaseRequestHandler):
 			
 			#Help
 			elif payload["request"] == "help":
-				pass #TODO: help
+				response = servermessage.help()
 			
 			else:
-				raise Exception("Error. Unhandled payload: " + payload["request"] +","+ payload["content"]) #TODO: find out if able to trigger.
+				raise Exception("Error. Unhandled payloaid: " + payload["request"] +","+ payload["content"]) #TODO: find out if able to trigger.
 			
 			self.connection.sendall(response)
 			
@@ -99,9 +113,9 @@ def parse_message(message):
 	Parses message from string format to dictionary. If the payload is an invalid json-format, return None.
 	"""
 	try:
-		self.payload = json.loads(message)
+		return json.loads(message)
 	except ValueError:
-		self.payload = None
+		return None
 			
 class ThreadedTCPServer(SocketServer.ThreadingMixIn, SocketServer.TCPServer):
     """
