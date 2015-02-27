@@ -1,0 +1,46 @@
+@startuml
+Class ClientHandler{
+	ip
+	port
+	connection
+	username
+}
+
+Class ThreadedTCPServer{
+}
+
+Class Servermessage{
+	def msg()
+	def error(content)
+	def greeting(username)
+	def message(sender, content)
+	def users(usernames)
+	def get_timestamp()
+}
+
+Class Validation{
+	def is_invalid_username()
+	def is_invalid_payload()
+	def is_username_taken()
+}
+
+Class Client{
+	def run()
+	def disconnect()
+	def recieve_message()
+	def send_payload()
+}
+
+Class History{
+	recieved_messages
+}
+
+ClientHandler->Client
+ThreadedTCPServer -up-> ClientHandler
+Validation -> ClientHandler
+ClientHandler -up-> Servermessage
+Servermessage -down->Client
+Client -left-> ClientHandler
+ClientHandler -up-> History
+@enduml
+	
