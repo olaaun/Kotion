@@ -6,19 +6,22 @@ import servermessage
 from validation import *
 
 threads = set()
-history = History()
+
 
 class History:
 	"""
 	History keeps track of the messages on the server.
 	The messages are payloads previously sent from the server.
 	"""
-	def __init__(self,threads):
+
+	def __init__(self):
 		self.messages = []
-	def getMessages():
+	def getMessages(self):
 		return self.messages
-	def add(payload):
+	def add(self, payload):
 		self.messages.append(payload)
+
+history = History()
 
 class ClientHandler(SocketServer.BaseRequestHandler):
 	"""
@@ -93,7 +96,7 @@ class ClientHandler(SocketServer.BaseRequestHandler):
 			
 			
 				
-            # TODO: Add handling of received payload from client
+			# TODO: Add handling of received payload from client
 def send_to_all_users(origin,payload):
 	"""
 	Send response-payload to all user except the sender.
@@ -118,24 +121,24 @@ def parse_message(message):
 		return None
 			
 class ThreadedTCPServer(SocketServer.ThreadingMixIn, SocketServer.TCPServer):
-    """
-    This class is present so that each client connected will be ran as a own
-    thread. In that way, all clients will be served by the server.
+	"""
+	This class is present so that each client connected will be ran as a own
+	thread. In that way, all clients will be served by the server.
 
-    No alterations is necessary
-    """
-    allow_reuse_address = True
+	No alterations is necessary
+	"""
+	allow_reuse_address = True
 
 if __name__ == "__main__":
-    """
-    This is the main method and is executed when you type "python Server.py"
-    in your terminal.
+	"""
+	This is the main method and is executed when you type "python Server.py"
+	in your terminal.
 
-    No alterations is necessary
-    """
-    HOST, PORT = 'localhost', 9998
-    print 'Server running...'
+	No alterations is necessary
+	"""
+	HOST, PORT = 'localhost', 9998
+	print 'Server running...'
 
-    # Set up and initiate the TCP server
-    server = ThreadedTCPServer((HOST, PORT), ClientHandler)
-    server.serve_forever()
+	# Set up and initiate the TCP server
+	server = ThreadedTCPServer((HOST, PORT), ClientHandler)
+	server.serve_forever()
