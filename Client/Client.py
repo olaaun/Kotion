@@ -2,6 +2,7 @@
 import socket
 import MessageReceiver
 import json
+import threading
 
 class Client:
     """
@@ -24,19 +25,19 @@ class Client:
         # Initiate the connection to the server
         self.connection.connect((self.host, self.server_port))
         message_receiver = MessageReceiver(self, self.connection)
-        print "Welcome! Type in your input. Type 'help' to view the commands."
+        message_receiver.start()
+        message_sender=threading.Thread(target=self.input_loop)
+        message_sender.start()
+        print "Welcome! Type in your input"
+
+
+    def input_loop(self):
         while True:
             data=input('')
-            if data=='logout':
-                self.disconnect()
-                print('Disconnected')
-                break
             self.send_payload(data)
-            print(self.recieve_message)
-
 
     def disconnect(self):
-		self.connection.
+		#self.connection.
         self.connection.close()
         #Do more here probably
         pass
