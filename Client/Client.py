@@ -57,7 +57,7 @@ class Client:
         output = "{1} - {0} [{2}]:\n".format(timestamp, sender, response)
 
         # Make indentation. Split when response = history.
-        output = "\t" + "\t\n".join(content.split("\n"))
+        output += "\t" + "\t\n".join(content.split("\n"))
 
         print(output)
 
@@ -65,7 +65,11 @@ class Client:
         """
         Creates json of a command.
         """
-        request, content = command.split(" ")
+        if " " in command:
+            request, content = command.split(" ",1)
+        else:
+            request = command
+            content = ""
         data = {"request": request, "content": content}
         return json.dumps(data)
 

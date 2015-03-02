@@ -1,7 +1,6 @@
 """
 Functions that validates
 """
-
 def is_invalid_username(username):
 	"""
 	Returns true if username is invalid

@@ -52,12 +52,8 @@ class ClientHandler(SocketServer.BaseRequestHandler):
 			#Validate request
 			elif is_invalid_payload(payload):
 				response = servermessage.error("The message does not contain the correct fields.")
-				
-			payload["request"] = payload["request"].strip()
-			payload["content"] = payload["content"].strip()
-			
 			#Login
-			if payload["request"] == "login":
+			elif payload["request"] == "login":
 				if is_invalid_username(payload["content"]):
 					response = servermessage.error("Invalid username. Can only contain charackters [A-Z], [a-z] and numbers 0-9")
 				elif is_username_taken(threads,payload["content"]):
@@ -66,6 +62,9 @@ class ClientHandler(SocketServer.BaseRequestHandler):
 					self.username = payload["content"]
 					threads.add(self)
 					response = servermessage.history(hist)
+			#Help
+			elif payload["request"] == "help":
+				response = servermessage.help()
 			elif self.username == None:
 				response = servermessage.error("You have to login to write a message.")
 			#Logout
@@ -77,18 +76,15 @@ class ClientHandler(SocketServer.BaseRequestHandler):
 			#Msg
 			elif payload["request"] == "msg":
 				message = servermessage.message(self.username,payload["content"])
-				history.add(message)
-				servermessage.send_to_all_users(self,message)
+				hist.add(message)
+				send_to_all_users(self,message)
 				continue
 			#Names
 			elif payload["request"] == "names":
 				response = servermessage.users(get_usernames())
 			
-			#Help
-			elif payload["request"] == "help":
-				response = servermessage.help()
-			
 			else:
+				
 				raise Exception("Error. Unhandled payloaid: " + payload["request"] +","+ payload["content"]) #TODO: find out if able to trigger.
 			
 			self.connection.sendall(response)

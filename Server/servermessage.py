@@ -8,7 +8,7 @@ def msg(timestamp,sender,response,content):
 	"""
 	Creates json in the specified format.
 	"""
-	return  "{timestamp: '%s',sender: '%s',response: '%s',content: '%s'}" % (timestamp,sender,response,content)
+	return  '{"timestamp": "%s","sender": "%s","response": "%s","content": "%s"}' % (timestamp,sender,response,content)
 
 def error(content):
 	"""
@@ -28,8 +28,7 @@ def help():
 login <username>: Send a requet to server with specified username.
 logout: Sends a request to log out and disconnect from the server.
 msg <message>: Sends a message to the server that broadcasts to all connected clients.
-names: Sends a list of usernames that are connected to the server.
-	"""
+names: Sends a list of usernames that are connected to the server.""".replace("\n","\\n")
 	return msg(timestamp,sender,response,content)
 def history(hist):
 	"""
@@ -43,7 +42,7 @@ def history(hist):
 		time = payload["timestamp"]
 		username = payload["sender"]
 		message = payload["content"]
-		content += '{0} {1}: "{2}"'.format(time,username,message)
+		content += "{0} {1}: {2}".format(time,username,message)
 	sender = "server"
 	return msg(timestamp,sender,response,content)
 
