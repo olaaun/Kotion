@@ -67,7 +67,8 @@ class ClientHandler(SocketServer.BaseRequestHandler):
 					self.username = payload["content"]
 					threads.add(self)
 					response = servermessage.history(history)
-			
+			elif self.username == None:
+				response = servermessage.error("You have to login to write a message.")
 			#Logout
 			elif payload["request"] == "logout":
 				del threads[self]
