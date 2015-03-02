@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import SocketServer
 import json
-import time
 import servermessage
 from validation import *
 
@@ -21,7 +20,7 @@ class History:
 	def add(self, payload):
 		self.messages.append(payload)
 
-history = History()
+hist = History()
 
 class ClientHandler(SocketServer.BaseRequestHandler):
 	"""
@@ -43,7 +42,7 @@ class ClientHandler(SocketServer.BaseRequestHandler):
 		while True:
 			received_string = self.connection.recv(4096)
 			
-			payload = parse_message()
+			payload = parse_message(received_string)
 			response = None
 			
 			#Validate json
@@ -66,7 +65,7 @@ class ClientHandler(SocketServer.BaseRequestHandler):
 				else:
 					self.username = payload["content"]
 					threads.add(self)
-					response = servermessage.history(history)
+					response = servermessage.history(hist)
 			elif self.username == None:
 				response = servermessage.error("You have to login to write a message.")
 			#Logout
@@ -138,7 +137,7 @@ if __name__ == "__main__":
 	No alterations is necessary
 	"""
 	HOST, PORT = 'localhost', 9998
-	print 'Server running...'
+	print('Server running...')
 
 	# Set up and initiate the TCP server
 	server = ThreadedTCPServer((HOST, PORT), ClientHandler)

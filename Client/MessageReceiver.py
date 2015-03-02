@@ -14,6 +14,7 @@ class MessageReceiver(Thread):
 		"""
 
 		# Flag to run thread as a deamon
+		Thread.__init__(self)
 		self.daemon = True
 		self.connection = connection
 		self.client = client

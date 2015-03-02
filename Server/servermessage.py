@@ -1,4 +1,5 @@
 import json
+import time
 """
 Functions that returns json-response-payloads as text.
 """
@@ -7,7 +8,7 @@ def msg(timestamp,sender,response,content):
 	"""
 	Creates json in the specified format.
 	"""
-	return  """{'timestamp': '{0}','sender': '{1}','response': '{2}','content': '{3}'}""".format(timestamp,sender,response,content)
+	return  "{timestamp: '%s',sender: '%s',response: '%s',content: '%s'}" % (timestamp,sender,response,content)
 
 def error(content):
 	"""
@@ -30,14 +31,14 @@ msg <message>: Sends a message to the server that broadcasts to all connected cl
 names: Sends a list of usernames that are connected to the server.
 	"""
 	return msg(timestamp,sender,response,content)
-def history(history):
+def history(hist):
 	"""
 	Make history message for user who logged in.
 	"""
 	timestamp = get_timestamp()
 	response = "history"
 	content = ""
-	for entry in history:
+	for entry in hist.getMessages():
 		payload = json.loads(entry)
 		time = payload["timestamp"]
 		username = payload["sender"]

@@ -25,16 +25,16 @@ class Client:
     def run(self):
         # Initiate the connection to the server
         self.connection.connect((self.host, self.server_port))
-        message_receiver = MessageReceiver.MessageReceiver(self, self.connection)
-        message_receiver.start()
         message_sender = threading.Thread(target=self.input_loop)
         message_sender.start()
+        message_receiver = MessageReceiver.MessageReceiver(self, self.connection)
+        message_receiver.start()
         print "Welcome! Type in your input"
 
 
     def input_loop(self):
         while True:
-            data = input('')
+            data = raw_input('')
             self.send_payload(data)
 
     def disconnect(self):
@@ -47,7 +47,7 @@ class Client:
         """
         Recieve_message is used by the MessageReciever-class to handle incoming messages.
         """
-        payload = json.parse_message(message)
+        payload = json.loads(message)
 
         timestamp = payload["timestamp"]
         sender = payload["sender"]
@@ -56,12 +56,12 @@ class Client:
 
         output = "{1} - {0} [{2}]:\n".format(timestamp, sender, response)
 
-        # Make indentation. Split when respnse = history.
+        # Make indentation. Split when response = history.
         output = "\t" + "\t\n".join(content.split("\n"))
 
         print(output)
 
-    def create_payload(command):
+    def create_payload(self,command):
         """
         Creates json of a command.
         """
@@ -69,7 +69,7 @@ class Client:
         data = {"request": request, "content": content}
         return json.dumps(data)
 
-    def parse_message(message):
+    def parse_message(self,message):
         """
         Parses message from string format to dictionary. If the payload is an invalid json-format, return None.
         """
@@ -80,7 +80,7 @@ class Client:
 
     def send_payload(self, data):
         # TODO: Handle sending of a payload
-        data = json.create_payload(data)
+        data = self.create_payload(data)
         self.connection.sendto(data, (self.host, self.server_port))
         pass
 
