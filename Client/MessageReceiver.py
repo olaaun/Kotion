@@ -23,4 +23,11 @@ class MessageReceiver(Thread):
 	def run(self):
 		while True:
 			received_string = self.connection.recv(4096)
+			
+			
+			#This will occur when the server closes the connection
+			if not received_string:
+				self.client.disconnect()
+				return
+				
 			self.client.receive_message(received_string)

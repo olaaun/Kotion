@@ -42,7 +42,7 @@ def history(hist):
 		time = payload["timestamp"]
 		username = payload["sender"]
 		message = payload["content"]
-		content += "{0} {1}: {2}".format(time,username,message)
+		content += "{0} {1}: {2}\\n".format(time,username,message)
 	sender = "server"
 	return msg(timestamp,sender,response,content)
 
@@ -59,8 +59,8 @@ def users(usernames):
 	"""	
 	timestamp = get_timestamp()
 	response = "info"
-	sender = server
-	content = "\n".join(usernames)
+	sender = "server"
+	content = "\\n".join(usernames)
 	return msg(timestamp,sender,response,content)
 	
 def get_timestamp():

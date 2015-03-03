@@ -29,6 +29,13 @@ class ClientHandler(SocketServer.BaseRequestHandler):
 	only connected clients, and not the server itself. If you want to write
 	logic for the server, you must write it outside this class
 	"""
+	def disconnect(self):
+		"""
+		Disconnects a user
+		"""
+		threads.remove(self)
+		self.connection.close()
+		return
 	def handle(self):
 		"""
 		This method handles the connection between a client and the server.
@@ -41,7 +48,6 @@ class ClientHandler(SocketServer.BaseRequestHandler):
 		# Loop that listens for messages from the client
 		while True:
 			received_string = self.connection.recv(4096)
-			
 			payload = parse_message(received_string)
 			response = None
 			
@@ -69,10 +75,8 @@ class ClientHandler(SocketServer.BaseRequestHandler):
 				response = servermessage.error("You have to login to write a message.")
 			#Logout
 			elif payload["request"] == "logout":
-				del threads[self]
-				self.socket.close()
-				return #Not sure if this will work.
-				
+				self.disconnect()
+				return
 			#Msg
 			elif payload["request"] == "msg":
 				message = servermessage.message(self.username,payload["content"])
@@ -85,8 +89,7 @@ class ClientHandler(SocketServer.BaseRequestHandler):
 			
 			else:
 				
-				raise Exception("Error. Unhandled payloaid: " + payload["request"] +","+ payload["content"]) #TODO: find out if able to trigger.
-			
+				raise Exception("Error. Unhandled payloaid: " + payload) #TODO: find out if able to trigger.
 			self.connection.sendall(response)
 			
 			
