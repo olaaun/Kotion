@@ -21,9 +21,11 @@ class MessageReceiver(Thread):
 		self.run()
 
 	def run(self):
+		"""
+		Creates a loop that listens for new messages.
+		"""
 		while True:
 			received_string = self.connection.recv(4096)
-			
 			
 			#This will occur when the server closes the connection
 			if not received_string:

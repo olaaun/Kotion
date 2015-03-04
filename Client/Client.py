@@ -20,25 +20,35 @@ class Client:
 		self.host = host
 		self.server_port = server_port
 		self.run()
-		# TODO: Finish init process with necessary code
 
 	def run(self):
+		"""
+		Creates connection between client and server. Creates threads that handles receiving and sending of data.
+		"""
 		# Initiate the connection to the server
-		print "Welcome! Type in your input"
 		self.connection.connect((self.host, self.server_port))
+		print "Welcome! Type in your input"
 		
+		#Create sender-thread
 		message_sender = threading.Thread(target=self.input_loop)
 		message_sender.daemon = True
 		message_sender.start()
 		
+		#Create receiver-thread
 		message_receiver = MessageReceiver.MessageReceiver(self, self.connection)
 		message_receiver.start()
 
 	def input_loop(self):
+		"""
+		Ask the user repeatedly for commands to send to the server
+		"""
 		while True:
-			data = raw_input('')
-			self.send_payload(data)
+			command = raw_input('')
+			self.send_payload(command)
 	def disconnect(self):
+		"""
+		Closes the connection to the server
+		"""
 		print "disconnecting from server"
 		self.connection.close()
 		return
@@ -60,33 +70,32 @@ class Client:
 		output += "\t" + content.replace("\n","\n\t")
 
 		print(output)
-
-	def create_payload(self,command):
+	def send_payload(self, command):
 		"""
-		Creates json of a command.
+		Parses command and sends the payload to the server.
+		"""
+		payload = Payload(command)
+		self.connection.sendto(str(payload), (self.host, self.server_port))
+
+class Payload:
+	"""
+	Payload that handles outgoing payloads. The data-field is a dictionary.
+	"""
+	def __init__(self,command):
+		"""
+		Put command into payload-object.
 		"""
 		if " " in command:
 			request, content = command.split(" ",1)
 		else:
 			request = command
 			content = ""
-		data = {"request": request, "content": content}
-		return json.dumps(data)
-
-	def parse_message(self,message):
+		self.data = {"request": request, "content": content}
+	def __str__(self):
 		"""
-		Parses message from string format to dictionary. If the payload is an invalid json-format, return None.
+		Create json-string from dictionary.
 		"""
-		try:
-			return json.loads(message)
-		except ValueError:
-			return None
-
-	def send_payload(self, data):
-		# TODO: Handle sending of a payload
-		payload = self.create_payload(data)
-		self.connection.sendto(payload, (self.host, self.server_port))
-
+		return json.dumps(self.data)
 
 if __name__ == '__main__':
 	"""

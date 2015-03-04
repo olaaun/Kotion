@@ -4,20 +4,29 @@ import json
 import servermessage
 from validation import *
 
+#Keeps track of running threads.
 threads = set()
 
 
 class History:
 	"""
-	History keeps track of the messages on the server.
-	The messages are payloads previously sent from the server.
+	History keeps track of the messages on the server. The messages are payloads previously sent from the server.
 	"""
 
 	def __init__(self):
+		"""
+		Initializes history with empty list.
+		"""
 		self.messages = []
 	def getMessages(self):
+		"""
+		Givs the message history. Each entry is a payload.
+		"""
 		return self.messages
 	def add(self, payload):
+		"""
+		Add a payload to the history.
+		"""
 		self.messages.append(payload)
 
 hist = History()
@@ -89,13 +98,9 @@ class ClientHandler(SocketServer.BaseRequestHandler):
 			
 			else:
 				
-				raise Exception("Error. Unhandled payloaid: " + payload) #TODO: find out if able to trigger.
+				raise Exception("Error. Unhandled payloaid: " + str(payload)) #TODO: find out if able to trigger.
 			self.connection.sendall(response)
-			
-			
-			
-				
-			# TODO: Add handling of received payload from client
+
 def send_to_all_users(origin,payload):
 	"""
 	Send response-payload to all user except the sender.

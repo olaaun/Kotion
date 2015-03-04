@@ -6,7 +6,7 @@ Functions that returns json-response-payloads as text.
 
 def msg(timestamp,sender,response,content):
 	"""
-	Creates json in the specified format.
+	Creates json in the specified format: {"timestamp": "%s","sender": "%s","response": "%s","content": "%s"}
 	"""
 	return  '{"timestamp": "%s","sender": "%s","response": "%s","content": "%s"}' % (timestamp,sender,response,content)
 
@@ -20,6 +20,7 @@ def error(content):
 	return msg(timestamp,sender,response,content)
 def help():
 	"""
+	Make help-payload that describes the different commands.
 	"""
 	timestamp = get_timestamp()
 	response = "history"
