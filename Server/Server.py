@@ -90,6 +90,8 @@ class ClientHandler(SocketServer.BaseRequestHandler):
 					self.username = payload["content"]
 					threads.add(self)
 					response = servermessage.history(hist)
+
+					print servermessage.get_timestamp() + " - " + self.username + " has connected"
 			#Help
 			elif payload["request"] == "help":
 				response = servermessage.help()
@@ -98,12 +100,16 @@ class ClientHandler(SocketServer.BaseRequestHandler):
 			#Logout
 			elif payload["request"] == "logout":
 				self.disconnect()
+
+				print servermessage.get_timestamp() + " - " + self.username + " disconnected"
 				return
 			#Msg
 			elif payload["request"] == "msg":
 				message = servermessage.message(self.username,payload["content"])
 				hist.add(message)
 				send_to_all_users(self,message)
+				
+				print servermessage.get_timestamp() + " - " + self.username + ": " + payload["content"]
 				continue
 			#Names
 			elif payload["request"] == "names":
