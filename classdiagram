@@ -1,49 +1,42 @@
 @startuml
+title ClassDiagram
 Class ClientHandler{
-	ip
-	port
-	connection
-	username
+	+ip
+	+port
+	+connection
+	+username
+	-void disconnect()
+	-void handle
 }
 
 Class ThreadedTCPServer{
-}
-
-Class Servermessage{
-	def msg()
-	def error(content)
-	def greeting(username)
-	def message(sender, content)
-	def users(usernames)
-	def get_timestamp()
-}
-
-Class Validation{
-	def is_invalid_username()
-	def is_invalid_payload()
-	def is_username_taken()
+	+serve_forever()
 }
 
 Class Client{
-	def run()
-	def disconnect()
-	def recieve_message()
-	def send_payload()
+	-connection
+	-host
+	-server_port
+	-void run()
+	-void input_loop()
+	+void disconnect()
+	+void recieve_message(message)
+	-void send_payload()
 }
 
 Class History{
-	recieved_messages
+	+List get_messages()
+	
 }
 Class Payload{
-	data
-	def str
+	-data
+	+String str
 }
 ClientHandler->Client
 ThreadedTCPServer -up-> ClientHandler
-Validation -> ClientHandler
-ClientHandler -up-> Servermessage
-Servermessage -down->Client
+
 Client -left-> ClientHandler
 ClientHandler -up-> History
 Client -> Payload
 @enduml
+	

@@ -70,7 +70,7 @@ class ClientHandler(SocketServer.BaseRequestHandler):
 			#Login
 			elif payload["request"] == "login":
 				if is_invalid_username(payload["content"]):
-					response = servermessage.error("Invalid username. Can only contain charackters [A-Z], [a-z] and numbers 0-9")
+					response = servermessage.error("Invalid username. Can only contain characters [A-Z], [a-z] and numbers 0-9")
 				elif is_username_taken(threads,payload["content"]):
 					response = servermessage.error("Username already taken.")
 				else:

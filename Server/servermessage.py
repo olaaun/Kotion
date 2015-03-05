@@ -49,7 +49,7 @@ def history(hist):
 
 def message(sender,content):
 	"""
-	Make message given username and content of the message.
+	Make message given content of the message.
 	"""
 	timestamp = get_timestamp()
 	response = "message"
