@@ -3,6 +3,7 @@ import socket
 import MessageReceiver
 import json
 import threading
+import sys
 
 
 class Client:
@@ -28,15 +29,19 @@ class Client:
 		# Initiate the connection to the server
 		self.connection.connect((self.host, self.server_port))
 		print "Welcome! Type in your input"
-		
+		try:
 		#Create sender-thread
-		message_sender = threading.Thread(target=self.input_loop)
-		message_sender.daemon = True
-		message_sender.start()
-		
-		#Create receiver-thread
-		message_receiver = MessageReceiver.MessageReceiver(self, self.connection)
-		message_receiver.start()
+			message_sender = threading.Thread(target=self.input_loop)
+			message_sender.daemon = True
+			message_sender.start()
+
+			#Create receiver-thread
+			message_receiver = MessageReceiver.MessageReceiver(self, self.connection)
+			message_receiver.start()
+		except KeyboardInterrupt:
+			print "losing"
+		finally:
+			sys.exit()
 
 	def input_loop(self):
 		"""

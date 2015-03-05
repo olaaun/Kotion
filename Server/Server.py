@@ -60,6 +60,8 @@ class ClientHandler(SocketServer.BaseRequestHandler):
 		except socket.error as e:
 			if e[0] == 10054:
 				self.disconnect()
+			elif e[0]==32:
+				self.disconnect()
 			else:
 				raise e
 	def loop(self):
