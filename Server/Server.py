@@ -2,6 +2,7 @@
 import SocketServer
 import json
 import servermessage
+import socket
 from validation import *
 
 #Keeps track of running threads.
@@ -54,7 +55,17 @@ class ClientHandler(SocketServer.BaseRequestHandler):
 		self.connection = self.request
 		self.username = None
 		
-		# Loop that listens for messages from the client
+		try:
+			self.loop()
+		except socket.error as e:
+			if e[0] == 10054:
+				self.disconnect()
+			else:
+				raise e
+	def loop(self):
+		"""
+		Main loop receives error.
+		"""
 		while True:
 			received_string = self.connection.recv(4096)
 			payload = parse_message(received_string)
