@@ -34,7 +34,10 @@ Class Client{
 Class History{
 	recieved_messages
 }
-
+Class Payload{
+	data
+	def str
+}
 ClientHandler->Client
 ThreadedTCPServer -up-> ClientHandler
 Validation -> ClientHandler
@@ -42,5 +45,5 @@ ClientHandler -up-> Servermessage
 Servermessage -down->Client
 Client -left-> ClientHandler
 ClientHandler -up-> History
+Client -> Payload
 @enduml
-	
