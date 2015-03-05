@@ -58,7 +58,7 @@ class ClientHandler(SocketServer.BaseRequestHandler):
 		try:
 			self.loop()
 		except socket.error as e:
-			if e[0] == 10054:
+			if e[0] == 10054: #Disconnects properly when user forces its client to close.
 				self.disconnect()
 			elif e[0]==32:
 				self.disconnect()
