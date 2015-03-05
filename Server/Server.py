@@ -27,10 +27,12 @@ class History:
 		"""
 		self.previousMessages.close()
 		self.previousMessages = file(name='messages.txt', mode='r+a')
-		toBeReturned=[]
+		listOfMessages=[]
 		for i in self.previousMessages.readlines():
-			toBeReturned.append(ast.literal_eval(i))
-		return toBeReturned
+			listOfMessages.append(ast.literal_eval(i))
+		if len(listOfMessages)>20:
+			return listOfMessages[-20:]
+		return listOfMessages
 
 	def add(self, payload):
 		"""
