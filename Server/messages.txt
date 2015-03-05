@@ -1,0 +1,7 @@
+"{\"timestamp\": \"17:38:31\",\"sender\": \"13\",\"response\": \"message\",\"content\": \"asd\"}"
+"{\"timestamp\": \"17:38:35\",\"sender\": \"13\",\"response\": \"message\",\"content\": \"rew\"}"
+"{\"timestamp\": \"17:38:38\",\"sender\": \"13\",\"response\": \"message\",\"content\": \"tre\"}"
+"{\"timestamp\": \"17:42:46\",\"sender\": \"testUser1\",\"response\": \"message\",\"content\": \"testing\"}"
+"{\"timestamp\": \"17:42:51\",\"sender\": \"testUser1\",\"response\": \"message\",\"content\": \"testing2\"}"
+"{\"timestamp\": \"17:43:24\",\"sender\": \"testuser2\",\"response\": \"message\",\"content\": \"more testing\"}"
+"{\"timestamp\": \"17:44:18\",\"sender\": \"testuser3\",\"response\": \"message\",\"content\": \"wutwutitworks\"}"

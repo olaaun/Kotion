@@ -4,6 +4,7 @@ import json
 import servermessage
 import socket
 from validation import *
+import ast
 
 #Keeps track of running threads.
 threads = set()
@@ -19,16 +20,27 @@ class History:
 		Initializes history with empty list.
 		"""
 		self.messages = []
+		self.previousMessages = file(name='messages.txt', mode='r+a')
 	def getMessages(self):
 		"""
 		Givs the message history. Each entry is a payload.
 		"""
-		return self.messages
+		self.previousMessages.close()
+		self.previousMessages = file(name='messages.txt', mode='r+a')
+		toBeReturned=[]
+		for i in self.previousMessages.readlines():
+			toBeReturned.append(ast.literal_eval(i))
+		return toBeReturned
+
 	def add(self, payload):
 		"""
 		Add a payload to the history.
 		"""
+
 		self.messages.append(payload)
+		self.previousMessages.write(json.dumps(payload)+"\n")
+	def close(self):
+		self.previousMessages.close()
 
 hist = History()
 
